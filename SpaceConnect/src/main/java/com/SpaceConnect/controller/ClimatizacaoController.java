@@ -41,4 +41,8 @@ public class ClimatizacaoController {
         climatizacaoService.deletar(id);
         return ResponseEntity.noContent().build();
     }
+    @PostMapping("/simular/{id}")
+    public ResponseEntity<Climatizacao> simular(@PathVariable Long id) {
+        return ResponseEntity.ok(climatizacaoService.simular(id));
+    }
 }

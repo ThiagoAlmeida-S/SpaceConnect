@@ -19,6 +19,8 @@ public class Sensor {
     private boolean ativo;
     private double ultimaLeitura;
     private LocalDateTime dataLeitura;
+    private double limiteMinimo;
+    private double limiteMaximo;
 
     @Enumerated(EnumType.STRING)
     private StatusSensor status;

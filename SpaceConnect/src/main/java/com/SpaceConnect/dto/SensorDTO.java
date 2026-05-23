@@ -13,4 +13,6 @@ public class SensorDTO {
     private double ultimaLeitura;
     private LocalDateTime dataLeitura;
     private StatusSensor status;
+    private double limiteMinimo;
+    private double limiteMaximo;
 }

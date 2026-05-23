@@ -41,4 +41,8 @@ public class SensorController {
         sensorService.deletar(id);
         return ResponseEntity.noContent().build();
     }
+    @PostMapping("/simular/{id}")
+    public ResponseEntity<Sensor> simular(@PathVariable Long id) {
+        return ResponseEntity.ok(sensorService.simular(id));
+    }
 }

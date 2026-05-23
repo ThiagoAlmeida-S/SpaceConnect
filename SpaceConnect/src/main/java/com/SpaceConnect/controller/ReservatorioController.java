@@ -41,4 +41,8 @@ public class ReservatorioController {
         reservatorioService.deletar(id);
         return ResponseEntity.noContent().build();
     }
+    @PostMapping("/simular/{id}")
+    public ResponseEntity<Reservatorio> simular(@PathVariable Long id) {
+        return ResponseEntity.ok(reservatorioService.simular(id));
+    }
 }

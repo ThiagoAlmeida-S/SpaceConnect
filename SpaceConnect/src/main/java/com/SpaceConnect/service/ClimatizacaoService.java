@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +32,7 @@ public class ClimatizacaoService {
         climatizacao.setUmidade(dto.getUmidade());
         climatizacao.setPressaoAtmosferica(dto.getPressaoAtmosferica());
         climatizacao.setSistemaAtivo(dto.isSistemaAtivo());
+        climatizacao.setStatus(calcularStatus(dto.getTemperaturaAtual(), dto.getTemperaturaDesejada()));
         return climatizacaoRepository.save(climatizacao);
     }
 
@@ -42,10 +44,34 @@ public class ClimatizacaoService {
         climatizacao.setUmidade(dto.getUmidade());
         climatizacao.setPressaoAtmosferica(dto.getPressaoAtmosferica());
         climatizacao.setSistemaAtivo(dto.isSistemaAtivo());
+        climatizacao.setStatus(calcularStatus(dto.getTemperaturaAtual(), dto.getTemperaturaDesejada()));
         return climatizacaoRepository.save(climatizacao);
     }
 
     public void deletar(Long id) {
         climatizacaoRepository.deleteById(id);
+    }
+
+    public Climatizacao simular(Long id) {
+        Climatizacao climatizacao = buscarPorId(id);
+        double variacao = (new Random().nextDouble() * 10) - 5;
+        double novaTemp = climatizacao.getTemperaturaAtual() + variacao;
+        novaTemp = Math.round(novaTemp * 10.0) / 10.0;
+
+        climatizacao.setTemperaturaAtual(novaTemp);
+        climatizacao.setStatus(calcularStatus(novaTemp, climatizacao.getTemperaturaDesejada()));
+
+        return climatizacaoRepository.save(climatizacao);
+    }
+
+    private String calcularStatus(double temperaturaAtual, double temperaturaDesejada) {
+        double diferenca = Math.abs(temperaturaAtual - temperaturaDesejada);
+        if (diferenca <= 2) {
+            return "NORMAL";
+        } else if (diferenca <= 5) {
+            return "ALERTA";
+        } else {
+            return "CRITICO";
+        }
     }
 }

@@ -18,4 +18,5 @@ public class Climatizacao {
     private double umidade;
     private double pressaoAtmosferica;
     private boolean sistemaAtivo;
+    private String status;
 }

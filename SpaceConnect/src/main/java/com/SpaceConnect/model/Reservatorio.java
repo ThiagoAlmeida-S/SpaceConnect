@@ -19,4 +19,5 @@ public class Reservatorio {
     private double nivelCritico;
     private double percentualAtual;
     private String unidade;
+    private String status;
 }

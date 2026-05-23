@@ -1,4 +1,7 @@
 package com.SpaceConnect.model;
 
-public class StatusSensor {
+public enum StatusSensor {
+    OPERACIONAL,
+    DEFEITO,
+    MANUTENCAO
 }

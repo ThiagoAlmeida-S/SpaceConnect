@@ -1,4 +1,7 @@
 package com.SpaceConnect.model;
 
-public class FonteEnergia {
+public enum FonteEnergia {
+    SOLAR,
+    NUCLEAR,
+    BATERIA
 }

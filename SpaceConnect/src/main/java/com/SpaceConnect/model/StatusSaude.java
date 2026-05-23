@@ -1,4 +1,7 @@
 package com.SpaceConnect.model;
 
-public class StatusSaude {
+public enum StatusSaude {
+    BEM,
+    MONITORAMENTO,
+    CRITICO
 }

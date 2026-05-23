@@ -1,4 +1,7 @@
 package com.SpaceConnect.model;
 
-public class NivelAlerta {
+public enum NivelAlerta {
+    INFO,
+    AVISO,
+    CRITICO
 }

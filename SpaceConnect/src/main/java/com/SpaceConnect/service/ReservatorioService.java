@@ -55,17 +55,25 @@ public class ReservatorioService {
     }
 
     public Reservatorio simular(Long id) {
-        Reservatorio reservatorio = buscarPorId(id);
+        Reservatorio original = buscarPorId(id);
+
+        Reservatorio novaLeitura = new Reservatorio();
+        novaLeitura.setNome(original.getNome());
+        novaLeitura.setTipo(original.getTipo());
+        novaLeitura.setCapacidadeMaxima(original.getCapacidadeMaxima());
+        novaLeitura.setNivelCritico(original.getNivelCritico());
+        novaLeitura.setUnidade(original.getUnidade());
+
         double variacao = (new Random().nextDouble() * 20) - 10;
-        double novoNivel = reservatorio.getNivelAtual() + variacao;
-        novoNivel = Math.max(0, Math.min(novoNivel, reservatorio.getCapacidadeMaxima()));
+        double novoNivel = original.getNivelAtual() + variacao;
+        novoNivel = Math.max(0, Math.min(novoNivel, original.getCapacidadeMaxima()));
         novoNivel = Math.round(novoNivel * 10.0) / 10.0;
 
-        reservatorio.setNivelAtual(novoNivel);
-        reservatorio.setPercentualAtual(novoNivel / reservatorio.getCapacidadeMaxima() * 100);
-        reservatorio.setStatus(calcularStatus(novoNivel, reservatorio.getNivelCritico(), reservatorio.getCapacidadeMaxima()));
+        novaLeitura.setNivelAtual(novoNivel);
+        novaLeitura.setPercentualAtual(novoNivel / original.getCapacidadeMaxima() * 100);
+        novaLeitura.setStatus(calcularStatus(novoNivel, original.getNivelCritico(), original.getCapacidadeMaxima()));
 
-        return reservatorioRepository.save(reservatorio);
+        return reservatorioRepository.save(novaLeitura);
     }
 
     private String calcularStatus(double nivelAtual, double nivelCritico, double capacidadeMaxima) {

@@ -53,15 +53,23 @@ public class ClimatizacaoService {
     }
 
     public Climatizacao simular(Long id) {
-        Climatizacao climatizacao = buscarPorId(id);
+        Climatizacao original = buscarPorId(id);
+
+        Climatizacao novaLeitura = new Climatizacao();
+        novaLeitura.setSetor(original.getSetor());
+        novaLeitura.setTemperaturaDesejada(original.getTemperaturaDesejada());
+        novaLeitura.setUmidade(original.getUmidade());
+        novaLeitura.setPressaoAtmosferica(original.getPressaoAtmosferica());
+        novaLeitura.setSistemaAtivo(original.isSistemaAtivo());
+
         double variacao = (new Random().nextDouble() * 10) - 5;
-        double novaTemp = climatizacao.getTemperaturaAtual() + variacao;
+        double novaTemp = original.getTemperaturaAtual() + variacao;
         novaTemp = Math.round(novaTemp * 10.0) / 10.0;
 
-        climatizacao.setTemperaturaAtual(novaTemp);
-        climatizacao.setStatus(calcularStatus(novaTemp, climatizacao.getTemperaturaDesejada()));
+        novaLeitura.setTemperaturaAtual(novaTemp);
+        novaLeitura.setStatus(calcularStatus(novaTemp, original.getTemperaturaDesejada()));
 
-        return climatizacaoRepository.save(climatizacao);
+        return climatizacaoRepository.save(novaLeitura);
     }
 
     private String calcularStatus(double temperaturaAtual, double temperaturaDesejada) {

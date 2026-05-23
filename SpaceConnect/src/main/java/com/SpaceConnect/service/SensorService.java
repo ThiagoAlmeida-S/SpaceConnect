@@ -59,23 +59,32 @@ public class SensorService {
     }
 
     public Sensor simular(Long id) {
-        Sensor sensor = buscarPorId(id);
-        double amplitude = sensor.getLimiteMaximo() - sensor.getLimiteMinimo();
-        double valor = sensor.getLimiteMinimo() + (new Random().nextDouble() * amplitude * 1.2) - (amplitude * 0.1);
+        Sensor original = buscarPorId(id);
+
+        Sensor novaLeitura = new Sensor();
+        novaLeitura.setNome(original.getNome());
+        novaLeitura.setTipo(original.getTipo());
+        novaLeitura.setLocalizacao(original.getLocalizacao());
+        novaLeitura.setAtivo(original.isAtivo());
+        novaLeitura.setLimiteMinimo(original.getLimiteMinimo());
+        novaLeitura.setLimiteMaximo(original.getLimiteMaximo());
+
+        double amplitude = original.getLimiteMaximo() - original.getLimiteMinimo();
+        double valor = original.getLimiteMinimo() + (new Random().nextDouble() * amplitude * 1.2) - (amplitude * 0.1);
         valor = Math.round(valor * 10.0) / 10.0;
 
-        sensor.setUltimaLeitura(valor);
-        sensor.setDataLeitura(LocalDateTime.now());
+        novaLeitura.setUltimaLeitura(valor);
+        novaLeitura.setDataLeitura(LocalDateTime.now());
 
         double zona = amplitude * 0.1;
-        if (valor < sensor.getLimiteMinimo() || valor > sensor.getLimiteMaximo()) {
-            sensor.setStatus(StatusSensor.DEFEITO);
-        } else if (valor <= sensor.getLimiteMinimo() + zona || valor >= sensor.getLimiteMaximo() - zona) {
-            sensor.setStatus(StatusSensor.MANUTENCAO);
+        if (valor < original.getLimiteMinimo() || valor > original.getLimiteMaximo()) {
+            novaLeitura.setStatus(StatusSensor.DEFEITO);
+        } else if (valor <= original.getLimiteMinimo() + zona || valor >= original.getLimiteMaximo() - zona) {
+            novaLeitura.setStatus(StatusSensor.MANUTENCAO);
         } else {
-            sensor.setStatus(StatusSensor.OPERACIONAL);
+            novaLeitura.setStatus(StatusSensor.OPERACIONAL);
         }
 
-        return sensorRepository.save(sensor);
+        return sensorRepository.save(novaLeitura);
     }
 }
